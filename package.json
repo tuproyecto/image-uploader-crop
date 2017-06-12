@@ -1,0 +1,43 @@
+{
+  "name": "image-uploader-crop",
+  "version": "1.0.0",
+  "description": "cropper and uploader images that uses another libraries",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tuproyecto/image-uploader-crop.git"
+  },
+  "keywords": [
+    "cropper",
+    "uploader",
+    "images",
+    "crop"
+  ],
+  "author": [
+    {
+      "name": "tuproyecto.com",
+      "email": "desarrollo@tuproyecto.com",
+      "url": "http://tuproyecto.com"
+    },
+    {
+      "name": "Robin Dev",
+      "email": "linkrobin1024@gmail.com"
+    },
+    {
+      "name": "Daniel Ortegon",
+      "email": "daniel.ortegon87@gmail.com"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tuproyecto/image-uploader-crop/issues"
+  },
+  "homepage": "https://github.com/tuproyecto/image-uploader-crop#readme",
+  "dependencies": {
+    "fine-uploader": "^5.14.4",
+    "jcrop": "0.0.1"
+  }
+}
