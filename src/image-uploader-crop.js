@@ -1,13 +1,14 @@
-// image-uploader-crop v1.0 for jQuery that uses fine-uploader, jcrop
-// ==================================================================
+// image-uploader-crop v0.0.1 for jQuery that uses fine-uploader, jcrop
+// (c) 2017, MIT licensed. http://tuproyecto.com
+// ====================================================================
 // Dependencies: jQuery, fine-uploader, jcrop
-// Author: TuProyecto.co
+// Author: TuProyecto.com
 // Developer: @krobing
 // Created: 04/03/2016
-// Website: tuproyecto.co
+// Website: http://tuproyecto.com
 // Description: cropper and uploader of images that uses another libraries
 
-(function (factory) {
+!(function (factory) { 'use strict'
 	if (typeof define === 'function' && define.amd) {
 		// AMD. Register as an anonymous module.
 		define(['jquery'], factory);
@@ -18,7 +19,7 @@
 		// Browser globals
 		factory(jQuery);
 	}
-}(function ($) {
+}(function ($) { 'use strict';
 	var slice = Array.prototype.slice; // save ref to original slice()
 	var splice = Array.prototype.splice; // save ref to original slice()
 
@@ -188,7 +189,8 @@
 
 		/**
 		* set image
-		* @param urlImage
+		* @param {String} urlImage
+		* @param {Function} callback
 		*/
 		setImage: function (urlImage, callback) {
 			urlImage || (urlImage = this.settings.imgCrop.attr('src'));
@@ -262,6 +264,7 @@
 
 		/**
 		* Render FineUploader plugin for user product image
+		* @param {Element jQuery} $uploaderImg
 		*/
 		renderUploaderImg: function ($uploaderImg) {
 
@@ -319,6 +322,8 @@
 
 		/**
 		* set image crop plugin
+		* @param {Element jQuery} $imgCrop
+		* @param {Function} callback
 		*/
 		renderImageCrop: function ($imgCrop, callback) {
 
@@ -336,7 +341,7 @@
 				// minSize: [this.settings.configImg.minWidthImg, this.settings.configImg.minHeightImg],
 				// maxSize: [this.settings.configImg.maxWidthImg, this.settings.configImg.maxHeightImg],
 				bgColor: 'black',
-				bgOpacity: .4,
+				bgOpacity: 0.4,
 				setSelect: [ 0, 0, this.settings.configImg.minWidthImg, this.settings.configImg.minHeightImg ],
 				aspectRatio:  this.settings.configImg.minWidthImg / this.settings.configImg.minHeightImg,
 				boxWidth: $(this.settings.imgCrop.parent()[0]).width(),
@@ -575,7 +580,7 @@
 			if( $.isFunction(this.settings.callbacks['onCropError']) )
 				this.settings.callbacks['onCropError'].call(this, this.jcrop_img, jqXHR, error);
 		}
-	}
+	};
 
 	// plugin class
 	// instance the plugin
@@ -594,7 +599,7 @@
 		// initialize plugin
 		if( $.isFunction(plugin.init) )
 			plugin.init(element, options);
-	}
+	};
 
 	// extends prototype of plugin
 	$.imageUploaderCrop.prototype = {
@@ -661,7 +666,7 @@
 		* get image preview element
 		*/
 		getPreviewImg : function () {
-			return this.settings.previewImg
+			return this.settings.previewImg;
 		},
 
 		/**
@@ -692,6 +697,6 @@
 		} else {
 			$.error( 'Method "' +  optsOrCmd + '" does not exist in imageUploaderCrop - (krobing) plugin!');
 		}
-	}
+	};
 
 }));

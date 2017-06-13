@@ -1,7 +1,7 @@
 {
   "name": "image-uploader-crop",
   "version": "0.0.1",
-  "description": "cropper and uploader images that uses another libraries",
+  "description": "cropper and uploader of images that uses another libraries",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,7 +14,11 @@
     "cropper",
     "uploader",
     "images",
-    "crop"
+    "crop",
+    "fine-uploader",
+    "jcrop",
+    "jquery",
+    "TuProyecto"
   ],
   "author": [
     {
@@ -39,5 +43,15 @@
   "dependencies": {
     "fine-uploader": "^5.14.4",
     "jcrop": "0.0.1"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-jshint": "^2.0.4",
+    "gulp-notify": "^3.0.0",
+    "gulp-sourcemaps": "^2.6.0",
+    "gulp-uglify": "^3.0.0",
+    "jshint": "^2.9.4",
+    "merge-stream": "^1.0.1"
   }
 }
