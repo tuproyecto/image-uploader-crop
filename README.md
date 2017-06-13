@@ -1,2 +1,2 @@
 # image-uploader-crop
-cropper and uploader images that uses another libraries
+cropper and uploader of images that uses another libraries
