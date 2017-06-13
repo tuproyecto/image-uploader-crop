@@ -1,4 +1,4 @@
-// image-uploader-crop v0.0.1 for jQuery that uses fine-uploader, jcrop
+// image-uploader-crop v0.0.2 for jQuery that uses fine-uploader, jcrop
 // (c) 2017, MIT licensed. http://tuproyecto.com
 // ====================================================================
 // Dependencies: jQuery, fine-uploader, jcrop
