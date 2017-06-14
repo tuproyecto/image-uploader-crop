@@ -1,0 +1,33 @@
+{
+  "name": "image-uploader-crop",
+  "description": "cropper and uploader of images that uses another libraries",
+  "main": "index.js",
+  "authors": [
+    "tuproyecto.com",
+    "@krobing",
+    "@DanielOrtegon87"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "cropper",
+    "uploader",
+    "images",
+    "crop",
+    "fine-uploader",
+    "jcrop",
+    "jquery",
+    "TuProyecto"
+  ],
+  "homepage": "https://github.com/tuproyecto/image-uploader-crop",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    ".npmignore",
+    ".gitignore",
+    ".jshintrc",
+    "gulpfile.js",
+    "test",
+    "tests"
+  ]
+}

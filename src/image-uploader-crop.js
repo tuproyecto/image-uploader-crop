@@ -1,4 +1,4 @@
-// image-uploader-crop v0.0.2 for jQuery that uses fine-uploader, jcrop
+// image-uploader-crop v0.0.4 for jQuery that uses fine-uploader, jcrop
 // (c) 2017, MIT licensed. http://tuproyecto.com
 // ====================================================================
 // Dependencies: jQuery, fine-uploader, jcrop
@@ -26,6 +26,7 @@
 	// default options
 	var defaults = {
 		formCrop: null,
+		btnToCrop: null,
 		imgCrop: null,
 		previewImg: null,
 		uploaderImg: null,
@@ -165,8 +166,15 @@
 		reassignActions: function() {
 			this.settings.uploaderImg.off('complete');
 			this.settings.uploaderImg.on('complete', methods.onCompleteLoadImg.bind(this));
-			this.settings.formCrop.off('submit');
-			this.settings.formCrop.on('submit', methods.submitCropImage.bind(this));
+
+			// if was defined a button to execute action to crop
+			if(this.settings.btnToCrop) {
+				this.settings.btnToCrop.off('click', methods.submitCropImage.bind(this));
+				this.settings.btnToCrop.on('click', methods.submitCropImage.bind(this));
+			} else {
+				this.settings.formCrop.off('submit', methods.submitCropImage.bind(this));
+				this.settings.formCrop.on('submit', methods.submitCropImage.bind(this));
+			}
 		},
 
 		/**
@@ -197,15 +205,21 @@
 
 			var _this = this;
 
-			// validates if already or not was created the crop image
+			try {
+				this.settings.imgCrop || throw "The imgCrop element have not went assign";
+			}catch(err) {
+				console.error('Error: '+ err + ".");
+			}
+
+			// validate if already or not was created the crop image
 			if( this.settings.imgCrop.data('Jcrop') !== undefined ){
 				this.jcrop_img = this.settings.imgCrop.data('Jcrop');
 
-				// settings image crop
+				// set image crop
 				this.jcrop_img.setImage(urlImage, function () {
 
 					var dimImg = [];
-					// settings image crop
+					// image crop settings
 					if( this.settings.configImg.minWidthImg && this.settings.configImg.minHeightImg ) {
 						dimImg = [this.settings.configImg.minWidthImg, this.settings.configImg.minHeightImg];
 					}else {
@@ -220,7 +234,7 @@
 						imgHeight: dimImg[1]
 					});
 
-					// Add values to the crop form
+					// add values to the crop form
 					_this.settings.formCrop.find('input#crop_type').val( 'url' );
 					_this.settings.formCrop.find('input#file_name').val( urlImage );
 					_this.settings.formCrop.find('input#file_type').val( urlImage.split('.').slice(-1) );
@@ -230,7 +244,7 @@
 
 				this.settings.imgCrop.attr('src', urlImage);
 
-				// create crop if does not exist
+				// create crop whether does not exist
 				methods.renderImageCrop.call(this, this.settings.imgCrop, function () {
 
 					var dimImg = [];
@@ -268,20 +282,18 @@
 		*/
 		renderUploaderImg: function ($uploaderImg) {
 
-			if( !existUploaderPlugin() )
+			try {
+				existUploaderPlugin() || throw "The imageUploaderCrop jQuery library do need of the fine-uploader jQuery library";
+			}catch(err) {
+				console.error('Error: '+ err + ".");
 				return false;
+			}
 
 			var _this = this;
 
 			$uploaderImg.fineUploader({
 				debug: false,
 				template: this.settings.templateImgUploader,
-				// session: {
-				//     endpoint: document.url + Route.route('file.temp'),
-				//     params: {
-				//         'codigo_proyecto': 0
-				//     }
-				// },
 				request: this.settings.uploadding,
 				thumbnails: {
 					placeholders: {
@@ -300,6 +312,7 @@
 					},
 					allowedExtensions: this.settings.configImg.allowedExtensions || defaults.configImg.allowedExtensions,
 					sizeLimit: this.settings.configImg.sizeLimit || defaults.configImg.sizeLimit,
+					stopOnFirstInvalidFile: false,
 					itemLimit: 0
 				},
 				scaling: {
@@ -309,7 +322,6 @@
 				// Events handlers
 				callbacks: {
 					onUpload: methods.onLoadImg.bind(this)
-					// onComplete: methods.onCompleteLoadImg.bind(this)
 				},
 				dragAndDrop: {
 					extraDropzones: this.settings.extraDropzones
@@ -327,8 +339,12 @@
 		*/
 		renderImageCrop: function ($imgCrop, callback) {
 
-			if( !existCropPlugin() )
+			try {
+				existCropPlugin() || throw "The imageUploaderCrop jQuery library do need of the jcrop jQuery library";
+			}catch(err) {
+				console.error('Error: '+ err + ".");
 				return false;
+			}
 
 			//images crop
 			var _this = this;
@@ -344,7 +360,7 @@
 				bgOpacity: 0.4,
 				setSelect: [ 0, 0, this.settings.configImg.minWidthImg, this.settings.configImg.minHeightImg ],
 				aspectRatio:  this.settings.configImg.minWidthImg / this.settings.configImg.minHeightImg,
-				boxWidth: $(this.settings.imgCrop.parent()[0]).width(),
+				boxWidth: $imgCrop.parent().width(),
 				boxHeight: 0,
 				allowSelect: false,
 				allowResize: true
@@ -416,7 +432,7 @@
 
 			var _this = this;
 
-			var data = formToJson( e.target );
+			var data = formToJson( this.settings.formCrop );
 			data.targ_w = this.settings.configImg.minWidthImg;
 			data.targ_h = this.settings.configImg.minHeightImg;
 
@@ -476,6 +492,7 @@
 
 			var $areaDrop = this.settings.uploaderImg.fineUploader('getDropTarget', id);
 
+			// when the image was loaded with a drop zone
 			if( $areaDrop !== undefined && $areaDrop.length ){
 				if( $areaDrop.hasClass('image-area-drop') || $areaDrop.hasClass('wrapper-image-crop') ){
 
@@ -484,8 +501,9 @@
 				}
 			}
 
-			if( $.isFunction(this.settings.callbacks['onLoadImg']) )
+			if( $.isFunction(this.settings.callbacks['onLoadImg']) ) {
 				this.settings.callbacks['onLoadImg'].call(this, this.settings.uploaderImg, id, name);
+			}
 		},
 
 		/**
@@ -538,8 +556,9 @@
 						imgHeight: res.file_height
 					}, function () {
 						// emit callback
-						if( $.isFunction(this.settings.callbacks['onCompleteLoad']) )
+						if( $.isFunction(this.settings.callbacks['onCompleteLoad']) ) {
 							this.settings.callbacks['onCompleteLoad'].call(this, this.settings.uploaderImg, id, name, res);
+						}
 					}.bind(this));
 
 				}.bind(this));
@@ -562,8 +581,9 @@
 			this.settings.formCrop.find(':submit').removeClass('disabled');
 
 			// call crop complete
-			if( $.isFunction(this.settings.callbacks['onCropComplete']) )
+			if( $.isFunction(this.settings.callbacks['onCropComplete']) ) {
 				this.settings.callbacks['onCropComplete'].call(this, this.jcrop_img, resp, jqXHR);
+			}
 		},
 
 		/**
@@ -577,8 +597,9 @@
 			this.settings.formCrop.find(':submit').removeClass('disabled');
 
 			// call crop error
-			if( $.isFunction(this.settings.callbacks['onCropError']) )
+			if( $.isFunction(this.settings.callbacks['onCropError']) ) {
 				this.settings.callbacks['onCropError'].call(this, this.jcrop_img, jqXHR, error);
+			}
 		}
 	};
 
@@ -615,7 +636,7 @@
 			this.settings = $.extend({}, defaults, options);
 
 			// check out if already was assigned the jcrop library
-			if( this.settings.imgCrop && this.settings.imgCrop.data('Jcrop') !== undefined ){
+			if( this.settings.imgCrop && this.settings.imgCrop.data('Jcrop') !== undefined ) {
 				this.jcrop_img = this.settings.imgCrop.data('Jcrop');
 				this.jcrop_img.destroy();
 			}
@@ -623,6 +644,7 @@
 			// Init image uploader and actions
 			methods.reassignActions.call(this);
 			methods.renderUploaderImg.call(this, this.settings.uploaderImg);
+			methods.renderImageCrop.call(this, this.settings.imgCrop);
 		},
 
 		/**
