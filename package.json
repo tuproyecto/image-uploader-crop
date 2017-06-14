@@ -1,6 +1,6 @@
 {
   "name": "image-uploader-crop",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "cropper and uploader of images that uses another libraries",
   "main": "index.js",
   "scripts": {
