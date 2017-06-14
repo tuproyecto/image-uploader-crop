@@ -206,7 +206,7 @@
 			var _this = this;
 
 			try {
-				this.settings.imgCrop || throw "The imgCrop element have not went assign";
+				if( !this.settings.imgCrop ) { throw "The imgCrop element have not went assign"; }
 			}catch(err) {
 				console.error('Error: '+ err + ".");
 			}
@@ -283,7 +283,7 @@
 		renderUploaderImg: function ($uploaderImg) {
 
 			try {
-				existUploaderPlugin() || throw "The imageUploaderCrop jQuery library do need of the fine-uploader jQuery library";
+				if( !existUploaderPlugin() ) { throw "The imageUploaderCrop jQuery library do need of the fine-uploader jQuery library"; }
 			}catch(err) {
 				console.error('Error: '+ err + ".");
 				return false;
@@ -340,7 +340,7 @@
 		renderImageCrop: function ($imgCrop, callback) {
 
 			try {
-				existCropPlugin() || throw "The imageUploaderCrop jQuery library do need of the jcrop jQuery library";
+				if( !existCropPlugin() ) { throw "The imageUploaderCrop jQuery library do need of the jcrop jQuery library"; }
 			}catch(err) {
 				console.error('Error: '+ err + ".");
 				return false;
