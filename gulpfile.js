@@ -1,16 +1,27 @@
 /*jslint node: true */
 "use strict";
 
-var gulp   		= require('gulp'),
-	jshint 		= require('gulp-jshint'),
-	notify 		= require("gulp-notify"),
-	concat 		= require('gulp-concat'),
-	sourcemaps  = require('gulp-sourcemaps'),
-	uglify		= require('gulp-uglify'),
-	merge       = require('merge-stream');
+var gulp   		    = require('gulp'),
+	jshint 		    = require('gulp-jshint'),
+	notify 		    = require("gulp-notify"),
+	concat 		    = require('gulp-concat'),
+	sourcemaps      = require('gulp-sourcemaps'),
+	uglify		    = require('gulp-uglify'),
+    sass            = require('gulp-sass'),
+    autoprefixer    = require('gulp-autoprefixer'),
+    cleanCSS        = require('gulp-clean-css'),
+    merge           = require('merge-stream');
 
+// Browsers to target when prefixing CSS.
+var COMPATIBILITY = [
+  'last 2 versions',
+  'ie >= 9',
+  'Android >= 2.3'
+];
+
+// File paths to various assets are defined here.
 var PATHS = {
-	'modules': './node_modules/'
+    'modules': './node_modules/'
 }
 
 // Lint JS files
@@ -49,6 +60,26 @@ gulp.task('javascript', ['lint'], function () {
 		.pipe(gulp.dest('src/'));
 });
 
+// Compile Sass into CSS
+gulp.task('sass', function() {
+  return gulp.src('src/image-uploader-crop.scss')
+    .pipe(sourcemaps.init())
+    .pipe(sass())
+    .on('error', notify.onError({
+        message: "<%= error.message %>",
+        title: "Sass Error"
+    }))
+    // .pipe(autoprefixer({
+    //   browsers: COMPATIBILITY
+    // }).on('error', function (err) {
+    //     console.log( err );
+    // }))
+    // Minify CSS if run with --production flag
+    .pipe(cleanCSS())
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('src/'));
+});
+
 // Copy task
 gulp.task('copy', function (argument) {
 
@@ -62,5 +93,20 @@ gulp.task('copy', function (argument) {
 	return merge(fineUploaderPh, fineUploaderIcons);
 });
 
+// Task for watch changes
+gulp.task('watch', function () {
+    // Log file changes to console
+    function logFileChange(event) {
+        var fileName = require('path').relative(__dirname, event.path);
+        console.log('[' + 'WATCH'.green + '] ' + fileName.magenta + ' was ' + event.type + ', running tasks...');
+    }
+
+    // Sass watch
+    gulp.watch('src/*.scss', ['sass'])
+        .on('change', function(event) {
+            logFileChange(event);
+        });
+});
+
 // Default gulp task
-gulp.task('default', ['copy', 'javascript']);
+gulp.task('default', ['copy', 'sass', 'javascript']);

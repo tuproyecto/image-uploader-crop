@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Example of implements imageUploadaerCrop Plugin</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Normalize -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
+	<!-- Modernizr -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+
+	<link rel="stylesheet" href="../node_modules/fine-uploader/jquery.fine-uploader/fine-uploader-new.min.css">
+	<link rel="stylesheet" href="./image-uploader-crop.css">
+	<style>
+		body {
+			background-color: #f5f5f5;
+			font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+			font-size: 16px;
+		}
+		#content-image-uploader-crop {
+			padding: 60px 13%;
+		}
+		#content-image-uploader-crop fieldset {
+			border: 1px dashed #b3b3b3;
+			border-radius: 5px;
+			margin: 0 0 10px;
+		}
+		.btn-nice {
+		    background: -moz-linear-gradient(0deg, #206B55 0, #38BA93 100%);
+		    background: -webkit-gradient(linear, 0deg, color-stop(0, 206B55), color-stop(100%, 38BA93));
+		    background: -webkit-linear-gradient(0deg, #206B55 0, #38BA93 100%);
+		    background: -o-linear-gradient(0deg, #206B55 0, #38BA93 100%);
+		    background: -ms-linear-gradient(0deg, #206B55 0, #38BA93 100%);
+		    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1301FE', endColorstr='#F4F60C', GradientType='1');
+			border: none;
+		    background: linear-gradient(0deg, #206B55 0, #38BA93 100%);
+		    box-shadow: 0px 2px 5px rgba(0,0,0,.3);
+		    border-radius: 3px;
+		    padding: 8px 15px;
+		    color: #FFFFFF;
+		    font-weight: 100;
+		    cursor: pointer;
+		    display: inline-block;
+		    vertical-align: middle;
+		    margin: 5px 0 5px;
+		}
+		.btn-nice[type=submit] {
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		#btn-to-crop {
+			float: right;
+		}
+		.spinner {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			margin-top: -12px;
+			margin-left: -12px;
+			z-index: 1;
+		}
+	</style>
+</head>
+<body>
+	<!--[if lt IE 8]>
+	    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+	<![endif]-->
+
+	<form id="form-image-crop" action="">
+		<div id="content-image-uploader-crop">
+			<fieldset>
+				<legend>Image cropper &amp; uploader</legend>
+				<!-- image cropper and uploader -->
+				<div class="__fx-main-content">
+					<div class="__fx-column">
+						<h3>Fit picture:</h3>
+						<p>Drag the square to change the position and size.</p>
+						<div id="image-uploader" class="iuc__image-uploader iuc__clearfix">
+							<!-- Render image uploader -->
+						</div>
+						<div id="content-image-to-crop" class="iuc__content-image-to-crop image-area-drop" iuc__drop-area-text="Drop image here">
+							<img id="image-to-crop" src="" class="iuc__image-to-crop" />
+						</div>
+					</div>
+
+					<div class="__fx-column">
+						<h3>Preview:</h3>
+						<p>Preview of image</p>
+						<div id="content-image-preview" class="iuc__content-image-preview">
+							<img id="image-preview" src="" class="" />
+						</div>
+					</div>
+				</div>
+
+				<input type="hidden" name="image_to_save" value="" required>
+				<button id="btn-to-crop" class="btn-nice">Crop with action button</button>
+			</fieldset>
+
+			<input type="submit" value="Crop with form submit" class="btn-nice">
+		</div>
+	</form>
+
+	<!-- Example of custom template for fine-uploader plugin -->
+	<script type="text/template" id="qq-img-uploader-crop-template">
+	    <div class="qq-uploader-selector iuc__qq-uploader">
+	        <div class="qq-total-progress-bar-container-selector qq-total-progress-bar-container">
+	            <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-total-progress-bar-selector qq-progress-bar qq-total-progress-bar"></div>
+	        </div>
+	        <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
+	            <span class="qq-upload-drop-area-text-selector"></span>
+	        </div>
+	        <div class="qq-upload-button-selector iuc__qq-upload-button">
+	            <div>Cambiar imagen</div>
+	        </div>
+	        <span class="qq-drop-processing-selector qq-drop-processing">
+                <span>Processing dropped files...</span>
+                <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
+            </span>
+	        <ul class="qq-upload-list-selector" aria-live="polite" aria-relevant="additions removals">
+	            <li></li>
+	        </ul>
+	        <input type="hidden" id="crop_type" name="crop_type" />
+	        <input type="hidden" id="file_name" name="file_name" />
+	        <input type="hidden" id="file_type" name="file_type" />
+	        <input type="hidden" class="crop-x" name="x" />
+	        <input type="hidden" class="crop-y" name="y" />
+	        <input type="hidden" class="crop-w" name="w" />
+	        <input type="hidden" class="crop-h" name="h" />
+
+	        <dialog class="qq-alert-dialog-selector">
+	            <div class="qq-dialog-message-selector"></div>
+	            <div class="qq-dialog-buttons">
+	                <button class="qq-cancel-button-selector">Close</button>
+	            </div>
+	        </dialog>
+	        <dialog class="qq-confirm-dialog-selector">
+	            <div class="qq-dialog-message-selector"></div>
+	            <div class="qq-dialog-buttons">
+	                <button class="qq-cancel-button-selector">No</button>
+	                <button class="qq-ok-button-selector">Yes</button>
+	            </div>
+	        </dialog>
+	        <dialog class="qq-prompt-dialog-selector">
+	            <div class="qq-dialog-message-selector"></div>
+	            <input type="text">
+	            <div class="qq-dialog-buttons">
+	                <button class="qq-cancel-button-selector">Cancel</button>
+	                <button class="qq-ok-button-selector">Continue</button>
+	            </div>
+	        </dialog>
+	    </div>
+	</script>
+
+	<!-- jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<!-- Dependencies -->
+	<script src="../node_modules/fine-uploader/jquery.fine-uploader/jquery.fine-uploader.min.js"></script>
+	<script src="../node_modules/jcrop/jcrop.min.js"></script>
+	<script src="./image-uploader-crop.js"></script>
+	<!-- Custome javascript -->
+	<script>
+		(function ($, window, document, undefined) {
+			// When DOM was loaded
+			$(function () {
+				// ===============================================================
+				//              start of image uploader crop
+				// ===============================================================
+				var $wrapperImgToCrop = $('#content-image-uploader-crop');
+
+				$wrapperImgToCrop.imageUploaderCrop({
+	                formCrop: $('#form-image-crop'),
+	                imgCrop: $('#image-to-crop'),
+	                previewImg: $('#image-preview'),
+	                uploaderImg: $('#image-uploader'),
+	                templateImgUploader: 'qq-img-uploader-crop-template',
+	                // btnToCrop: this.$('#btn-to-crop'), // if pass the reference of action button for crop, the form submit wil be cancel for crop
+	                configImg: {
+	                    maxWidthImg : 646 * 4,
+	                    maxHeightImg : 374 * 4,
+	                    minWidthImg : 646,
+	                    minHeightImg : 374
+	                },
+	                uploadding: {
+	                    inputName: 'file',
+	                    endpoint: 'file.temp', // route to go to upload file to server
+	                    params: {}
+	                },
+	                cropping: {
+	                    endpoint: 'file.crop', // route to go to crop file to server
+	                    params: {}
+	                },
+	                extraDropzones: [$('#content-image-to-crop')],
+	                // Events handlers
+	                callbacks: {
+	                    onLoadImg: function ($uploaderImg, id, name) {
+
+	                    	// You would might set a spinner while it load it the image
+	                        setSpinner('#content-image-to-crop');
+	                    },
+	                    onCompleteLoad: function ($uploaderImg, id, name, res) {
+	                        $('#content-image-to-crop').css( {'border': 'none'} );
+
+	                        // remove spinner
+	                        removeSpinner('#content-image-to-crop');
+	                    },
+	                    onCropping: function (jcrop_img) {
+
+	                    	// You would might set a spinner while it load it the image
+	                        setSpinner('#content-image-to-crop');
+	                    },
+	                    onCropComplete: function (jcrop_img, resp, jqXHR) {
+	                    	// ==================================
+	                        // + Server response success or error
+	                       	// + and these other attributes:
+							// + {
+							// +	file_path: '',
+							// +	file_width: 0,
+							// +	file_height: 0,
+							// +	success: true
+							// + }
+							// ==================================
+
+
+							// assign the file path of server response
+							if(resp.file_path) {
+								this.$element.find('[name=image_to_save]').val(resp.file_path);
+							}
+
+	                       	// remove spinner
+	                        removeSpinner('#content-image-to-crop');
+	                    },
+	                    onCropError: function (jcrop_img, jqXHR, error) {
+	                    	// error of crop
+
+	                    	// remove spinner always
+	                       	removeSpinner('#content-image-to-crop');
+	                    }
+	                }
+	            });
+	            // End of plugin implementation
+	            // ----------------------------
+			});
+
+			//
+			// Helper functions
+			//
+
+			/**
+			* set a spinner
+			* @param { String|Element } selector
+			*/
+			function setSpinner(selector) {
+
+				var spinner = $(selector).find('.spinner').length ? $(selector).find('spinner') : $('<div>');
+
+				spinner.addClass('spinner').html('<img src="img/processing.gif" />');
+
+				$(selector).append(spinner)
+					.css({
+						'position': function (indx, pos) {
+							var posUp = pos;
+							if( posUp == 'static' ) posUp = 'relative';
+							return posUp;
+						},
+						'min-height': function (indx, dim) {
+							if( parseInt(dim) < spinner.outerHeight(true) ) {
+								return spinner.outerHeight(true);
+							}
+						}
+					});
+			}
+
+			/**
+			* remove spinner
+			* @param { String|Element } selector
+			*/
+			function removeSpinner(selector, direct) {
+				if(direct) {
+					$(selector).find('> .spinner').remove();
+				}else {
+					$(selector).find('.spinner').remove();
+				}
+			}
+		})($, this, this.document);
+	</script>
+</body>
+</html>

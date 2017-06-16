@@ -1,4 +1,4 @@
-// image-uploader-crop v0.0.4 for jQuery that uses fine-uploader, jcrop
+// image-uploader-crop v0.1.0 for jQuery that uses fine-uploader, jcrop
 // (c) 2017, MIT licensed. http://tuproyecto.com
 // ====================================================================
 // Dependencies: jQuery, fine-uploader, jcrop
@@ -201,15 +201,15 @@
 		* @param {Function} callback
 		*/
 		setImage: function (urlImage, callback) {
-			urlImage || (urlImage = this.settings.imgCrop.attr('src'));
+			urlImage || (urlImage = this.settings.imgCrop.attr('src')) || (urlImage = '');
+
+            try {
+                if( !this.settings.imgCrop ) { throw "The imgCrop element have not went assign"; }
+            }catch(err) {
+                console.error('Error: '+ err + ".");
+            }
 
 			var _this = this;
-
-			try {
-				if( !this.settings.imgCrop ) { throw "The imgCrop element have not went assign"; }
-			}catch(err) {
-				console.error('Error: '+ err + ".");
-			}
 
 			// validate if already or not was created the crop image
 			if( this.settings.imgCrop.data('Jcrop') !== undefined ){
@@ -282,12 +282,10 @@
 		*/
 		renderUploaderImg: function ($uploaderImg) {
 
-			try {
-				if( !existUploaderPlugin() ) { throw "The imageUploaderCrop jQuery library do need of the fine-uploader jQuery library"; }
-			}catch(err) {
-				console.error('Error: '+ err + ".");
+			if( !existUploaderPlugin() ) {
+				console.error('Error: The imageUploaderCrop jQuery library do need of the fine-uploader jQuery library.');
 				return false;
-			}
+            }
 
 			var _this = this;
 
@@ -339,12 +337,10 @@
 		*/
 		renderImageCrop: function ($imgCrop, callback) {
 
-			try {
-				if( !existCropPlugin() ) { throw "The imageUploaderCrop jQuery library do need of the jcrop jQuery library"; }
-			}catch(err) {
-				console.error('Error: '+ err + ".");
-				return false;
-			}
+			if( !existCropPlugin() ) {
+				console.error('Error: The imageUploaderCrop jQuery library do need of the jcrop jQuery library.');
+                return false;
+            }
 
 			//images crop
 			var _this = this;
@@ -463,7 +459,9 @@
 				ry = (ratioLesser * $(this.settings.previewImg.parent()[0]).width()) / coords.h;
 
 			// set content height of content preview
-			$(this.settings.previewImg.parent()[0]).height( ratioLesser * $(this.settings.previewImg.parent()[0]).width() );
+            if( this.settings.previewImg.attr('src') ) {
+                $(this.settings.previewImg.parent()[0]).height( ratioLesser * $(this.settings.previewImg.parent()[0]).width() );
+            }
 
 			this.settings.formCrop.find('input.crop-x').val( coords.x );
 			this.settings.formCrop.find('input.crop-y').val( coords.y );
