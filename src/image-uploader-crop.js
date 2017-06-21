@@ -1,4 +1,4 @@
-// image-uploader-crop v0.1.0 for jQuery that uses fine-uploader, jcrop
+// image-uploader-crop v0.1.1 for jQuery that uses fine-uploader, jcrop
 // (c) 2017, MIT licensed. http://tuproyecto.com
 // ====================================================================
 // Dependencies: jQuery, fine-uploader, jcrop
@@ -338,7 +338,7 @@
 		renderImageCrop: function ($imgCrop, callback) {
 
 			if( !existCropPlugin() ) {
-				console.error('Error: The imageUploaderCrop jQuery library do need of the jcrop jQuery library.');
+				console.error('Error: The imageUploaderCrop jQuery library needs of the jcrop jQuery library.');
                 return false;
             }
 
@@ -410,9 +410,9 @@
 				// outerImage: settings.imgSet
 			});
 
-			this.jcrop_img.setSelect( [settings.ix, settings.iy, settings.dimSelect[0], settings.dimSelect[1]] );
-
 			this.settings.previewImg.attr('src', settings.imgSet);
+
+            this.jcrop_img.setSelect( [settings.ix, settings.iy, settings.dimSelect[0], settings.dimSelect[1]] );
 
 			//run callback
 			if (typeof callback == 'function') {

@@ -74,7 +74,9 @@ gulp.task('sass', function() {
     // }).on('error', function (err) {
     //     console.log( err );
     // }))
-    // Minify CSS if run with --production flag
+    // Minify CSS
+    .pipe(gulp.dest('src/'))
+    .pipe(concat('image-uploader-crop.min.css'))
     .pipe(cleanCSS())
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('src/'));
