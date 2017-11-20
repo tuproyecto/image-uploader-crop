@@ -59,21 +59,7 @@
 			onLoadImg: function ($uploaderImg, id, name) {},
 			onCompleteLoad: function ($uploaderImg, id, name, res) {}
 		},
-        messages: {
-            typeError: '{file} tiene una extensión inválida. Extensiones válidas {extensions}.',
-            sizeError: "{file} es demasiado grande, el tamaño máximo de archivo es {sizeLimit}.",
-            minSizeError: "{file} es demasiado pequeño, el tamaño mínimo de archivo es {minSizeLimit}.",
-            emptyError: "{file} está vacío, por favor seleccione los archivos nuevamente sin él.",
-            noFilesError: "No hay archivos para cargar",
-            tooManyItemsError: "Demasiados articulos ({netItems}) sería cargado. Límite de artículo es {itemLimit}.",
-            maxHeightImageError: 'La imagen es muy alta.',
-            maxWidthImageError: "La imagen es muy amplia.",
-            minHeightImageError: "La imagen no es lo suficientemente alta",
-            minWidthImageError: "La imagen no es lo suficientemente amplia",
-            retryFailTooManyItems: "Error de reintentos - ha alcanzado el límite de su archivo.",
-            onLeave: "Los archivos se cargan, si se va ahora, la carga se cancelará.",
-            unsupportedBrowserIos8Safari: "Error irrecuperable: este navegador no permite la carga de archivos de ningún tipo debido a errores graves en iOS8 Safari. Utilice iOS8 Chrome hasta que Apple resuelva estos problemas."
-        },
+        messages: {},
 		showMessage: function (message) {
 			return alertify.alert(message);
 		},
@@ -336,21 +322,7 @@
 				callbacks: {
 					onUpload: methods.onLoadImg.bind(this)
 				},
-                messages: {
-                    typeError: defaults.messages.typeError,
-                    sizeError: defaults.messages.sizeError,
-                    minSizeError: defaults.messages.minSizeError,
-                    emptyError: defaults.messages.emptyError,
-                    noFilesError: defaults.messages.noFilesError,
-                    tooManyItemsError: defaults.messages.tooManyItemsError,
-                    maxHeightImageError: defaults.messages.maxHeightImageError,
-                    maxWidthImageError: defaults.messages.maxWidthImageError,
-                    minHeightImageError: defaults.messages.minHeightImageError,
-                    minWidthImageError: defaults.messages.minWidthImageError,
-                    retryFailTooManyItems: defaults.messages.retryFailTooManyItems,
-                    onLeave: defaults.messages.onLeave,
-                    unsupportedBrowserIos8Safari: defaults.messages.unsupportedBrowserIos8Safari
-                },
+                messages: $.extend({}, this.settings.messages),
 				dragAndDrop: {
 					extraDropzones: this.settings.extraDropzones
 				},
