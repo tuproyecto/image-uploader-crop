@@ -1,10 +1,11 @@
 {
   "name": "image-uploader-crop",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "cropper and uploader of images that uses another libraries",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:watch": "npm test -- --watch"
   },
   "repository": {
     "type": "git",
@@ -41,8 +42,10 @@
   },
   "homepage": "https://github.com/tuproyecto/image-uploader-crop#readme",
   "dependencies": {
+    "build": "^0.1.4",
     "fine-uploader": "^5.14.4",
-    "jcrop": "0.0.1"
+    "jcrop": "0.0.1",
+    "prepublish": "^1.5.1"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
