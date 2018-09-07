@@ -31,6 +31,7 @@
 		previewImg: null,
 		uploaderImg: null,
 		templateImgUploader: '',
+		preventDuplicity: false,
 		configImg: {
 			maxWidthImg : 0, // 646 * 2
 			maxHeightImg : 0, // 374 * 2
@@ -641,10 +642,12 @@
 				this.jcrop_img.destroy();
 			}
 
-			// Init image uploader and actions
-			methods.reassignActions.call(this);
-			methods.renderUploaderImg.call(this, this.settings.uploaderImg);
-			methods.renderImageCrop.call(this, this.settings.imgCrop);
+			if( !this.settings.preventDuplicity ) {
+				// Init image uploader and actions
+				methods.reassignActions.call(this);
+				methods.renderUploaderImg.call(this, this.settings.uploaderImg);
+				methods.renderImageCrop.call(this, this.settings.imgCrop);
+			}
 		},
 
 		/**
