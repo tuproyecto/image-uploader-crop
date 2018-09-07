@@ -31,7 +31,7 @@
 		previewImg: null,
 		uploaderImg: null,
 		templateImgUploader: '',
-		preventDuplicity: false,
+		preventDuplicity: false,  
 		configImg: {
 			maxWidthImg : 0, // 646 * 2
 			maxHeightImg : 0, // 374 * 2
