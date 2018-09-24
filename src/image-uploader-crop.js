@@ -59,6 +59,7 @@
 			onLoadImg: function ($uploaderImg, id, name) {},
 			onCompleteLoad: function ($uploaderImg, id, name, res) {}
 		},
+        messages: {},
 		showMessage: function (message) {
 			return alertify.alert(message);
 		},
@@ -169,7 +170,7 @@
 
 			// if was defined a button to execute action to crop
 			if(this.settings.btnToCrop) {
-				this.settings.btnToCrop.off('click', methods.submitCropImage.bind(this));
+				this.settings.btnToCrop.unbind().off('click', methods.submitCropImage.bind(this));
 				this.settings.btnToCrop.on('click', methods.submitCropImage.bind(this));
 			} else {
 				this.settings.formCrop.off('submit', methods.submitCropImage.bind(this));
@@ -321,6 +322,7 @@
 				callbacks: {
 					onUpload: methods.onLoadImg.bind(this)
 				},
+                messages: $.extend({}, this.settings.messages),
 				dragAndDrop: {
 					extraDropzones: this.settings.extraDropzones
 				},
